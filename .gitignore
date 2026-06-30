@@ -1,0 +1,11 @@
+# Dépendances Node.js (réinstallées automatiquement par npm install)
+backend/node_modules/
+
+# Variables d'environnement sensibles (si tu en crées un jour)
+.env
+
+# Réponses des invités : à ne pas pousser sur GitHub (données personnelles !)
+backend/reponse.json
+
+# Fichiers système
+.DS_Store

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Invitation Anniversaire Jean-Michel Cristobal</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+        <link href="invitation.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <section id="step1" class="card-invitation visible">
+            <div class="content">
+                <p class="eyebrow">Vous êtes cordialement invité</p>
+                <h1 class="headline">L'anniversaire de<br><span class="name">Jean-Michel Cristobal</span></h1>
+                <p class="age-line">qui fête ses <span class="age-number">80</span> ans !</p>
+                <div class="birthday-banner">Happy birthday !</div>
+                
+                <div class="details">
+                    <div class="detail-row">
+                        <div class="detail-icon">📅</div>
+                        <div class="detail-text">
+                            <span class="detail-label">Date</span>
+                            <span class="detail-value">Samedi 12 décembre</span>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-icon">🕖</div>
+                        <div class="detail-text">
+                            <span class="detail-label">Heure</span>
+                            <span class="detail-value">[19h00]</span>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-icon">📍</div>
+                        <div class="detail-text">
+                            <span class="detail-label">Lieu</span>
+                            <span class="detail-value">salle des fêtes de Parville</span>
+                            <span class="detail-sub">12 Rte de Beaumont, 27180 Parville</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr class="divider">
+                <p class="rsvp-text">Merci de confirmer votre venu afin que l'on puisse bien tout organiser (repas, places, enfants, etc.)</p>
+                <a href="#formulaire" class="rsvp-button">Je confirme ma présence →</a>
+                <p class="rsvp-deadline">Merci de répondre avant le [date limite]</p>
+            </div>
+        </section>
+
+        <section id="step2" class="card-formulaire cache">
+            <form name="form_invit">
+                <fieldset id="form">
+                    <div id="nom">
+                        <label for="name">Nom et prénom *</label>
+                        <input type="text" id="name" placeholder="Entrez votre nom et prénom">
+                    </div>
+                    <div id="presence">
+                        <label id="present">Serez-vous présent(e) ?</label>
+                        <select name="presency" id="presency">
+                            <option value="choix">--Veuillez choisir une option--</option>
+                            <option value="oui">Oui, je viens</option>
+                            <option value="non">Non, je ne pourrai pas</option>
+                            <option value="uncertain">Pas encore sûr(e)</option>
+                        </select>
+                    </div>
+                    <hr>
+                    <div id="nb_personnes">
+                        <div class="container_pers" id="nb_adults">
+                            <div class="info">
+                                <label for="adultes">Adultes</label>
+                                <span class="under_text">Vous compris</span>
+                            </div>
+                            <div class="controls">
+                                <input type="button" class="moins" value="-">
+                                <span class="nb_pers" id="nb_adultes">0</span>
+                                <input type="button" class="plus" value="+">
+                            </div>
+                        </div>
+                        <div class="container_pers" id="nb_children">
+                            <div class="info">
+                                <label for="children">Enfants</label>
+                                <span class="under_text">Moins de 12 ans</span>
+                            </div>
+                            <div class="controls">
+                                <input type="button" class="moins" value="-">
+                                <span class="nb_pers" id="nb_enfants">0</span>
+                                <input type="button" class="plus" value="+">
+                            </div>
+                        </div>
+                        <hr>
+                        <div id="total_pers">Total<span class="total" id="total">0</span></div>
+                    </div>
+                </fieldset>
+                <br>
+                <input type="submit" class="valider" id="valider" value="Valider">
+                <input type="reset" class="effacer" id="effacer" value="Effacer">
+            </form>
+        </section>
+
+        <section id="step3" class="recap-wrap cache">
+            <div class="recap-content">
+                <div class="recap-icon">✓</div>
+                <p class="recap-title">C'est noté</p>
+                <p class="recap-subtitle">Merci, voici un récapitulatif de votre réponse</p>
+                <div class="recap-card">
+                    <div class="recap-row">
+                        <span class="recap-row-label">Nom</span>
+                        <span class="recap-row-value" id="recap-nom"></span>
+                    </div>
+                    <div class="recap-row">
+                        <span class="recap-row-label">Présence</span>
+                        <span class="recap-row-value" id="recap-presence">Je viens</span>
+                    </div>
+                    <hr class="divider">
+                    <div class="recap-row">
+                        <span class="recap-row-label">Adultes</span>
+                        <span class="recap-row-value" id="recap-adultes"></span>
+                    </div>
+                    <div class="recap-row">
+                        <span class="recap-row-label">Enfants</span>
+                        <span class="recap-row-value" id="recap-enfants"></span>
+                    </div>
+                    <div class="recap-total">
+                        <span class="recap-total-label">Total personnes</span>
+                        <span class="recap-total-value" id="recap-total"></span>
+                    </div>
+                </div>
+                <p class="recap-footer">Si une information est incorrecte, n'hésitez pas à renvoyer le formulaire - votre dernière réponse sera prise en compte.</p>
+                <button class="recap-modify" id="recap-modify">Modifier ma réponse</button>
+            </div>
+        </section>
+    </body>
+    <footer>
+        <script src="scripts/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="invitation.js"></script>
+    </footer>
+</html>
+
