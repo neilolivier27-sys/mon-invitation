@@ -14,6 +14,29 @@ function retirer_pers(field) {
     }
 }
 
+function afficher_temps_restants() {
+    const date_bday = new Date("2026-12-12T00:00:00");
+
+    let date_now = new Date();
+    let temps_restant_ms = date_bday - date_now;
+
+    let temps_restant_s = Math.floor(temps_restant_ms / 1000);
+
+    const jours = Math.floor(temps_restant_s / (24 * 3600));
+    temps_restant_s %= (24 * 3600);
+
+    const heures = Math.floor(temps_restant_s / 3600);
+    temps_restant_s %= 3600;
+
+    const minutes = Math.floor(temps_restant_s / 60);
+    const secondes = temps_restant_s % 60;
+
+    document.getElementById("cd-j").textContent = String(jours).padStart(2, "0");
+    document.getElementById("cd-h").textContent = String(heures).padStart(2, "0");
+    document.getElementById("cd-m").textContent = String(minutes).padStart(2, "0");
+    document.getElementById("cd-s").textContent = String(secondes).padStart(2, "0");
+}
+
 function effacer_formulaire() {
     if (confirm("Etes-vous sûr de vouloir effacer ces informations ?")) {
         nettoyage();
@@ -127,6 +150,38 @@ function getOuCreerIdentifiant() {
     return id;
 }
 
+function lancerConfettis() {
+    // Première salve depuis la gauche
+    confetti({
+        particleCount: 80,
+        angle: 60,
+        spread: 70,
+        origin: { x: 0, y: 0.7 },
+        colors: ['#d65a5a', '#f7b8ab', '#6b7a56', '#fff3eb', '#bf4b4b']
+    });
+
+    // Deuxième salve depuis la droite, légèrement décalée
+    setTimeout(() => {
+        confetti({
+            particleCount: 80,
+            angle: 120,
+            spread: 70,
+            origin: { x: 1, y: 0.7 },
+            colors: ['#d65a5a', '#f7b8ab', '#6b7a56', '#fff3eb', '#bf4b4b']
+        });
+    }, 200);
+
+    // Petite pluie centrale pour finir
+    setTimeout(() => {
+        confetti({
+            particleCount: 40,
+            spread: 100,
+            origin: { x: 0.5, y: 0.4 },
+            colors: ['#d65a5a', '#f7b8ab', '#6b7a56']
+        });
+    }, 500);
+}
+
 var plus = document.querySelectorAll(".plus");
 plus.forEach((item, index) => {
     item.addEventListener("click", (event) => {
@@ -171,7 +226,8 @@ document.forms["form_invit"].addEventListener("submit", async function(e) {
         presence: document.getElementById("presency").value,
         adultes: document.getElementById("nb_adultes").textContent,
         enfants: document.getElementById("nb_enfants").textContent,
-        total: document.getElementById("total").textContent
+        total: document.getElementById("total").textContent,
+        msg_livredor: document.getElementById("msg-livredor").value
     };
 
     document.getElementById("recap-nom").textContent = data["nom"];
@@ -188,10 +244,18 @@ document.forms["form_invit"].addEventListener("submit", async function(e) {
         });
 
         if (response.ok) {
-            document.getElementById("step2").classList.remove("visible");
-            document.getElementById("step2").classList.add("cache");
-            document.getElementById("step3").classList.remove("cache");
-            document.getElementById("step3").classList.add("visible");
+            const $s2 = $("#step2");
+            const $s3 = $("#step3");
+
+            $s2.stop(true, true).fadeOut(300, function() {
+                $s2.removeClass("visible");
+                $s2.addClass("cache");
+                $s3.removeClass("cache");
+                $s3.addClass("visible");
+                $s3.hide().fadeIn(400);
+                $('html, body').animate({ scrollTop: 0 }, 200);
+                lancerConfettis();
+            });
             
             console.log("Réponse envoyée avec succès");
         } else {
@@ -203,8 +267,10 @@ document.forms["form_invit"].addEventListener("submit", async function(e) {
 
 });
 
-
 $(document).ready(function() {
+    setInterval(() => {
+        afficher_temps_restants();
+    }, 1000);
     $(".rsvp-button").on("click", function(e) {
         e.preventDefault();
         const $s1 = $("#step1");
@@ -215,6 +281,7 @@ $(document).ready(function() {
             $s1.removeClass("visible");
             $s2.removeClass("cache");
             $s2.addClass("visible");
+            $s2.hide().fadeIn(400);
             $('html, body').animate({ scrollTop: $s2.offset().top }, 300);
         });
     });
@@ -223,10 +290,18 @@ $(document).ready(function() {
         e.preventDefault();
         const $s2 = $("#step2");
         const $s3 = $("#step3");
-        $s3.addClass("cache");
-        $s3.removeClass("visible");
-        $s2.removeClass("cache");
-        $s2.addClass("visible");
-        $("html, body").animate({ scrollTop: $s2.offset().top }, 300);
-    })
+        
+        $s3.stop(true, true).fadeOut(300, function() {
+            $s3.addClass("cache");
+            $s3.removeClass("visible");
+            $s2.removeClass("cache");
+            $s2.addClass("visible");
+            $s2.hide().fadeIn(400);
+            $("html, body").animate({ scrollTop: 0 }, 200);
+        });
+    });
+
+    $(".maps-link").on("click", function() {
+        open("https://maps.google.com/?q=12+Rte+de+Beaumont,+27180+Parville");
+    });
 });

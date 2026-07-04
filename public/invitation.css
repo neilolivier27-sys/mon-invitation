@@ -484,6 +484,35 @@ form input[type="reset"]:hover {
     font-size: 0.78rem;
 }
 
+/* ---- Livre d'or ---- */
+#livredor {
+    margin-bottom: 18px;
+}
+
+#livredor textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background-color: #fffbfa;
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+#livredor textarea::placeholder {
+    color: #b9a8a4;
+}
+
+#livredor textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(214, 90, 90, 0.12);
+}
+
 /* ---- Carte étape 3 : récapitulatif ---- */
 .card-recap {
     max-width: 480px;
@@ -645,4 +674,76 @@ form input[type="reset"]:hover {
     cursor: pointer;
     background: none;
     border: none;
+}
+
+/* ---- Compte à rebours ---- */
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+ 
+.cd-block {
+    background: var(--accent-soft);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 12px 10px;
+    min-width: 64px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+ 
+.cd-val {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--accent-dark);
+    line-height: 1;
+    display: block;
+    min-width: 2ch;
+}
+ 
+.cd-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: block;
+}
+ 
+@media (max-width: 400px) {
+    .cd-block {
+        min-width: 52px;
+        padding: 10px 8px 8px;
+    }
+ 
+    .cd-val {
+        font-size: 22px;
+    }
+}
+
+.maps-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent-dark);
+    text-decoration: none;
+    margin-top: 6px;
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: 2px;
+}
+
+.maps-link:hover {
+    color: var(--accent);
+}
+
+.maps-link .ti {
+    font-size: 15px;
 }
