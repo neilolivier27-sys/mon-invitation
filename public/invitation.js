@@ -14,6 +14,21 @@ function retirer_pers(field) {
     }
 }
 
+function ajouter_vege(field) {
+    const total = parseInt(document.getElementById("total").textContent, 10);
+    const vege = parseInt(field.textContent, 10);
+    if (vege < total) {
+        field.textContent = vege + 1;
+    }
+}
+
+function retirer_vege(field) {
+    const vege = parseInt(field.textContent, 10);
+    if (vege >= 1) {
+        field.textContent = vege - 1;
+    }
+}
+
 function afficher_temps_restants() {
     const date_bday = new Date("2026-12-12T00:00:00");
 
@@ -60,6 +75,16 @@ function nettoyage() {
     elements.forEach(e => {
         e.style.outline = 'initial';
     });
+    const fileInput = document.getElementById("image");
+    const filename = document.getElementById("upload-filename");
+    const preview = document.getElementById("photo-preview");
+    const previewImage = document.getElementById("preview-image");
+
+    if (fileInput) fileInput.value = "";
+    if (filename) filename.textContent = "Aucune photo sélectionnée";
+    if (preview) preview.classList.add("hidden");
+    if (previewImage) previewImage.src = "";
+
     document.forms["form_invit"].reset();
 }
 
@@ -195,8 +220,57 @@ moins.forEach((item, index) => {
     });
 });
 
+var plusVege = document.querySelectorAll(".plus-vege");
+plusVege.forEach((item, index) => {
+    item.addEventListener("click", (event) => {
+        ajouter_vege(event.target.previousElementSibling);
+    });
+});
+var moinsVege = document.querySelectorAll(".moins-vege");
+moinsVege.forEach((item, index) => {
+    item.addEventListener("click", (event) => {
+        retirer_vege(event.target.nextElementSibling);
+    });
+});
+
 var b_effacer = document.getElementById("effacer");
 b_effacer.addEventListener("click", () => {effacer_formulaire();});
+
+const fileInput = document.getElementById("image");
+const uploadFilename = document.getElementById("upload-filename");
+const preview = document.getElementById("photo-preview");
+const previewImage = document.getElementById("preview-image");
+const clearPhotoButton = document.getElementById("clear-photo");
+
+if (fileInput) {
+    fileInput.addEventListener("change", function() {
+        const file = fileInput.files && fileInput.files[0];
+        if (!file) {
+            if (uploadFilename) uploadFilename.textContent = "Aucune photo sélectionnée";
+            if (preview) preview.classList.add("hidden");
+            if (previewImage) previewImage.src = "";
+            return;
+        }
+
+        if (uploadFilename) uploadFilename.textContent = file.name;
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            if (previewImage) previewImage.src = event.target.result;
+            if (preview) preview.classList.remove("hidden");
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+if (clearPhotoButton) {
+    clearPhotoButton.addEventListener("click", function() {
+        if (fileInput) fileInput.value = "";
+        if (uploadFilename) uploadFilename.textContent = "Aucune photo sélectionnée";
+        if (preview) preview.classList.add("hidden");
+        if (previewImage) previewImage.src = "";
+    });
+}
 
 const nom = document.getElementById("name");
 nom.addEventListener("keyup", function(e) {
@@ -211,6 +285,7 @@ document.forms["form_invit"].addEventListener("submit", async function(e) {
     const adultes = document.getElementById("nb_adultes");
     const enfants = document.getElementById("nb_enfants");
     const total = document.getElementById("total");
+    const vege = document.getElementById("nb_vege");
 
     const nomValide = verification(nom, "Nom et prénom sont obligatoires.");
     const presenceValide = verification(presence, "Vous devez choisir une option.");
@@ -220,27 +295,33 @@ document.forms["form_invit"].addEventListener("submit", async function(e) {
         return;
     }
 
-    const data = {
-        id: getOuCreerIdentifiant(),
-        nom: document.getElementById("name").value,
-        presence: document.getElementById("presency").value,
-        adultes: document.getElementById("nb_adultes").textContent,
-        enfants: document.getElementById("nb_enfants").textContent,
-        total: document.getElementById("total").textContent,
-        msg_livredor: document.getElementById("msg-livredor").value
-    };
+    const formData = new FormData();
+    formData.append('id', getOuCreerIdentifiant());
+    formData.append('nom', document.getElementById("name").value);
+    formData.append('presence', document.getElementById("presency").value);
+    formData.append('adultes', document.getElementById("nb_adultes").textContent);
+    formData.append('enfants', document.getElementById("nb_enfants").textContent);
+    formData.append('total', document.getElementById("total").textContent);
+    formData.append('vegetariens', document.getElementById("nb_vege").textContent);
+    formData.append('msg_livredor', document.getElementById("msg-livredor").value);
 
-    document.getElementById("recap-nom").textContent = data["nom"];
-    document.getElementById("recap-adultes").textContent = data["adultes"];
-    document.getElementById("recap-enfants").textContent = data["enfants"];
-    document.getElementById("recap-total").textContent = data["total"];
-    recap_presence(data["presence"]);
+    const photoFile = document.getElementById("image").files[0];
+    if (photoFile) {
+        formData.append('photo', photoFile);
+    }
+
+    const nomRecap = formData.get('nom');
+    const presenceRecap = formData.get('presence');
+    document.getElementById("recap-nom").textContent = nomRecap;
+    document.getElementById("recap-adultes").textContent = formData.get('adultes');
+    document.getElementById("recap-enfants").textContent = formData.get('enfants');
+    document.getElementById("recap-total").textContent = formData.get('total');
+    recap_presence(presenceRecap);
 
     try {
         const response = await fetch('/api/reponse', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            body: formData
         });
 
         if (response.ok) {

@@ -9,9 +9,44 @@ const FICHIER_REPONSES = path.join(__dirname, 'reponse.json');
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-app.post('/api/reponse', (req, res) => {
+const multer = require('multer');
+
+// Configuration : où et comment sauvegarder les photos
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        const dossier = path.join(__dirname, '..', 'photos');
+        // Crée le dossier s'il n'existe pas
+        if (!fs.existsSync(dossier)) {
+            fs.mkdirSync(dossier);
+        }
+        cb(null, dossier);
+    },
+    filename: function(req, file, cb) {
+        // Nom du fichier : id-de-l-invité + extension originale
+        // ex: "3f9a2b10.jpg"
+        const ext = path.extname(file.originalname);
+        cb(null, req.body.id + ext);
+    }
+});
+
+// Limite à 5 Mo
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: function(req, file, cb) {
+        // On accepte seulement les images
+        if (!file.mimetype.startsWith('image/')) {
+            return cb(new Error('Seules les images sont acceptées'));
+        }
+        cb(null, true);
+    }
+});
+
+// Route unique pour enregistrer la réponse avec photo éventuelle
+app.post('/api/reponse', upload.single('photo'), (req, res) => {
     const nouvelleReponse = {
         ...req.body,
+        photo: req.file ? req.file.filename : null,
         date_envoi: new Date().toISOString()
     };
 
@@ -20,18 +55,13 @@ app.post('/api/reponse', (req, res) => {
         reponses = JSON.parse(fs.readFileSync(FICHIER_REPONSES, 'utf-8'));
     }
 
-    // Normalisation du nom pour comparer sans tenir compte des espaces superflus ou de la casse
-    const nomNormalise = (nouvelleReponse.nom || '').trim().toLowerCase();
-
     const indexExistant = reponses.findIndex(
         r => r.id === nouvelleReponse.id
     );
 
     if (indexExistant !== -1) {
-        // Une réponse avec ce nom existe déjà : on la remplace
         reponses[indexExistant] = nouvelleReponse;
     } else {
-        // Nouvelle personne : on ajoute
         reponses.push(nouvelleReponse);
     }
 
@@ -62,8 +92,8 @@ app.get("/admin/export", (req, res) => {
 
     // Construction du csv
     // On définit les colonnes dans l'ordre voulu
-    const colonnes = ['nom', 'presence', 'adultes', 'enfants', 'total', 'msg_livredor'];
-    const entetes = ['Nom', 'Presence', 'Adultes', 'Enfants', 'Total', 'Message'];
+    const colonnes = ['nom', 'presence', 'adultes', 'enfants', 'total', 'vegetariens', 'msg_livredor'];
+    const entetes = ['Nom', 'Presence', 'Adultes', 'Enfants', 'Total', 'Végétariens', 'Message'];
     
     function echapper(valeur) {
         if (valeur === undefined || valeur === null) return "";
@@ -106,6 +136,7 @@ app.get('/admin/dashboard', (req, res) => {
     const totalAdultes = reponses.reduce((sum, r) => sum + parseInt(r.adultes || 0), 0);
     const totalEnfants = reponses.reduce((sum, r) => sum + parseInt(r.enfants || 0), 0);
     const totalPersonnes = totalAdultes + totalEnfants;
+    const totalVegetariens = reponses.reduce((sum, r) => sum + parseInt(r.vegetariens || 0), 0);
 
     // Libellé listible pour la présence
         function labelPresence(val) {
@@ -134,6 +165,7 @@ app.get('/admin/dashboard', (req, res) => {
             <td class="center">${r.adultes || 0}</td>
             <td class="center">${r.enfants || 0}</td>
             <td class="center"><strong>${r.total || 0}</strong></td>
+            <td class="center"><strong>${r.vegetariens || 0}</strong></td>
             <td class="message">${r['msg_livredor'] || '<span class="vide">—</span>'}</td>
             <td class="date">${formatDate(r.date_envoi)}</td>
         </tr>`;
@@ -257,13 +289,14 @@ app.get('/admin/dashboard', (req, res) => {
                 width: 100%;
                 border-collapse: collapse;
                 font-size: 14px;
+                table-layout: fixed;
             }
-    
+
             thead tr {
                 background: var(--ink);
                 color: #fff;
             }
-    
+
             th {
                 padding: 12px 16px;
                 text-align: left;
@@ -272,17 +305,36 @@ app.get('/admin/dashboard', (req, res) => {
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
                 white-space: nowrap;
+                vertical-align: middle;
             }
-    
+
             td {
                 padding: 12px 16px;
                 border-top: 1px solid var(--border);
+                vertical-align: middle;
             }
-    
+
             tr:hover td { background: #fff8f5; }
-    
-            td.center { text-align: center; }
-    
+
+            th:nth-child(1), td:nth-child(1) {
+                width: 10%;
+                font-size: 12px;
+            }
+            th:nth-child(2), td:nth-child(2) { width: 9%; }
+            th:nth-child(3), td:nth-child(3),
+            th:nth-child(4), td:nth-child(4),
+            th:nth-child(5), td:nth-child(5),
+            th:nth-child(6), td:nth-child(6) {
+                width: 10%;
+                text-align: center;
+            }
+            th:nth-child(7), td:nth-child(7) { width: 22%; }
+            th:nth-child(8), td:nth-child(8) { width: 10%; }
+
+            td.center {
+                text-align: center;
+            }
+
             td.message {
                 max-width: 240px;
                 font-size: 13px;
@@ -348,6 +400,10 @@ app.get('/admin/dashboard', (req, res) => {
                 <div class="label">Total personnes</div>
                 <div class="value">${totalPersonnes}</div>
             </div>
+            <div class="stat accent">
+                <div class="label">Total végétariens</div>
+                <div class="value">${totalVegetariens}</div>
+            </div>
         </div>
     
         <div class="toolbar">
@@ -366,6 +422,7 @@ app.get('/admin/dashboard', (req, res) => {
                             <th>Adultes</th>
                             <th>Enfants</th>
                             <th>Total</th>
+                            <th>Végétariens</th>
                             <th>Message</th>
                             <th>Date d'envoi</th>
                         </tr>
@@ -378,6 +435,57 @@ app.get('/admin/dashboard', (req, res) => {
     </body>
     </html>`);
 
+});
+
+// Servir le dossier photos uniquement avec le bon mot de passe
+app.get('/admin/photos', (req, res) => {
+    if (req.query.pwd !== MOT_DE_PASSE_ADMIN) {
+        return res.status(401).send("Accès non autorisé.");
+    }
+
+    const dossier = path.join(__dirname, '..', 'photos');
+    if (!fs.existsSync(dossier)) {
+        return res.send("Aucune photo reçue pour l'instant.");
+    }
+
+    const fichiers = fs.readdirSync(dossier);
+    const reponses = JSON.parse(fs.readFileSync(FICHIER_REPONSES, 'utf-8'));
+
+    const images = fichiers.map(f => {
+        // On retrouve le nom de l'invité à partir du nom du fichier (= son id)
+        const id = path.basename(f, path.extname(f));
+        const invite = reponses.find(r => r.id === id);
+        return `
+            <div style="text-align:center; margin-bottom:24px;">
+                <img src="/admin/photo/${f}?pwd=${req.query.pwd}" 
+                     style="max-width:300px; border-radius:12px;">
+                <p style="margin-top:8px; font-weight:600;">
+                    ${invite ? invite.nom : 'Inconnu'}
+                </p>
+            </div>`;
+    }).join('');
+
+    res.send(`<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Photos invités</title></head>
+<body style="font-family:sans-serif; padding:32px; background:#fff3eb;">
+    <h1>📸 Photos des invités</h1>
+    <p>${fichiers.length} photo(s) reçue(s)</p>
+    <div style="display:flex; flex-wrap:wrap; gap:24px; margin-top:32px;">
+        ${images.length ? images : '<p>Aucune photo pour l\'instant.</p>'}
+    </div>
+</body></html>`);
+});
+
+// Route pour servir chaque photo individuellement
+app.get('/admin/photo/:filename', (req, res) => {
+    if (req.query.pwd !== MOT_DE_PASSE_ADMIN) {
+        return res.status(401).send("Accès non autorisé.");
+    }
+    const filePath = path.join(__dirname, '..', 'photos', req.params.filename);
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).send("Photo introuvable.");
+    }
+    res.sendFile(filePath);
 });
 
 app.listen(PORT, () => {

@@ -97,8 +97,34 @@
                         </div>
                         <hr>
                         <div id="total_pers">Total<span class="total" id="total">0</span></div>
+                        <hr>
+                        <div class="container_pers" id="nb_vegi">
+                            <div class="info">
+                                <label for="vegi">Végétariens</label>
+                                <span class="under_text">Vous compris</span>
+                            </div>
+                            <div class="controls">
+                                <input type="button" class="moins-vege" value="-">
+                                <span class="nb_pers" id="nb_vege">0</span>
+                                <input type="button" class="plus-vege" value="+">
+                            </div>
+                        </div>
                     </div>
-                    <hr>    
+                    <hr>
+                    <div id="img_select">
+                        <label for="image">Sélectionnez une photo souvenir avec Jean-Michel</label>
+                        <span class="under_text">Vous pouvez en ramener une le jour de l'événement</span>
+                        <div class="upload-wrapper">
+                            <label for="image" class="upload-button">Choisir une photo</label>
+                            <input type="file" name="image" id="image" accept="image/*">
+                            <span class="upload-filename" id="upload-filename">Aucune photo sélectionnée</span>
+                        </div>
+                        <div id="photo-preview" class="photo-preview hidden">
+                            <img id="preview-image" src="" alt="Aperçu de la photo sélectionnée">
+                            <button type="button" class="clear-photo" id="clear-photo">Retirer</button>
+                        </div>
+                    </div>
+                    <hr>   
                     <div id="livredor">
                         <label for="msg-livredor">Entrez un message pour Jean-Michel</label>
                         <textarea name="msg-livredor" id="msg-livredor" placeholder="Entrez votre message ici"></textarea>
@@ -136,6 +162,10 @@
                     <div class="recap-total">
                         <span class="recap-total-label">Total personnes</span>
                         <span class="recap-total-value" id="recap-total"></span>
+                    </div>
+                    <div class="recap-row">
+                        <span class="recap-row-label">Végétariens</span>
+                        <span class="recap-row-value" id="recap-vege"></span>
                     </div>
                 </div>
                 <p class="recap-footer">Si une information est incorrecte, n'hésitez pas à renvoyer le formulaire - votre dernière réponse sera prise en compte.</p>
