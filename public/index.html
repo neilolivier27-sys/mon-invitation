@@ -111,6 +111,41 @@
                         </div>
                     </div>
                     <hr>
+                    <div id="dimanche">
+                        <div id="presence_dimanche">
+                            <label>Serez-vous présent(e) le dimanche midi ?</label>
+                            <span class="under_text">Dimanche 13 décembre - repas de midi</span>
+                            <div id="choix_dimanche">
+                                <label class="radio-label">
+                                    <input type="radio" name="presence_dimanche" value="oui">Oui
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="presence_dimanche" value="non">Non
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="nb_dimanche" class="cache">
+                            <div class="container_pers">
+                                <div class="info">
+                                    <label>Combien serez-vous ?</label>
+                                    <span class="under_text">Maximum: votre total du samedi</span>
+                                </div>
+                                <div class="controls">
+                                    <input type="button" class="moins-dimanche" value="-">
+                                    <span class="nb_pers" id="nb_pers_dimanche">0</span>
+                                    <input type="button" class="plus-dimanche" value="+">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="names_pers" class="cache">
+                        <div id="info_names">
+                            <label for="names">Entrez les noms des invités</label>
+                            <span class="under_text">Sans votre nom</span>
+                        </div>
+                    </div>
+                    <hr>
                     <div id="img_select">
                         <label for="image">Sélectionnez une photo souvenir avec Jean-Michel</label>
                         <span class="under_text">Vous pouvez en ramener une le jour de l'événement</span>
@@ -166,6 +201,11 @@
                     <div class="recap-row">
                         <span class="recap-row-label">Végétariens</span>
                         <span class="recap-row-value" id="recap-vege"></span>
+                    </div>
+                    <hr class="recap-divider">
+                    <div class="recap-row" id="recap-dimanche-row">
+                        <span class="recap-row-label">Dimanche midi</span>
+                        <span class="recap-row-value" id="recap-dimanche"></span>
                     </div>
                 </div>
                 <p class="recap-footer">Si une information est incorrecte, n'hésitez pas à renvoyer le formulaire - votre dernière réponse sera prise en compte.</p>

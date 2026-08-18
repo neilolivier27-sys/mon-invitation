@@ -73,6 +73,38 @@ app.post('/api/reponse', upload.single('photo'), (req, res) => {
 // ----- Export CSV pprotégé par mot de passe -----
 const MOT_DE_PASSE_ADMIN = process.env.ADMIN_PASSWORD || "anniversaire80";
 
+function parseNomsInvites(valeur) {
+    if (!valeur) return "";
+
+    if (Array.isArray(valeur)) {
+        return valeur.filter(Boolean).join(', ');
+    }
+
+    if (typeof valeur === 'string') {
+        const texte = valeur.trim();
+        if (!texte) return "";
+
+        try {
+            const parsed = JSON.parse(texte);
+            if (Array.isArray(parsed)) {
+                return parsed.filter(Boolean).join(', ');
+            }
+        } catch (error) {
+            // si la valeur est déjà sous forme simple, on continue plus bas
+        }
+
+        return texte
+            .replace(/^\[|\]$/g, '')
+            .replace(/['"]/g, '')
+            .split(',')
+            .map(item => item.trim())
+            .filter(Boolean)
+            .join(', ');
+    }
+
+    return String(valeur);
+}
+
 app.get("/admin/export", (req, res) => {
     // Vérification du mot de passe passé en paramètre d'url
     if (req.query.pwd !== MOT_DE_PASSE_ADMIN) {
@@ -92,8 +124,8 @@ app.get("/admin/export", (req, res) => {
 
     // Construction du csv
     // On définit les colonnes dans l'ordre voulu
-    const colonnes = ['nom', 'presence', 'adultes', 'enfants', 'total', 'vegetariens', 'msg_livredor'];
-    const entetes = ['Nom', 'Presence', 'Adultes', 'Enfants', 'Total', 'Végétariens', 'Message'];
+    const colonnes = ['nom', 'presence', 'adultes', 'enfants', 'total', 'vegetariens', 'presence_dimanche', 'nb_pers_dimanche', 'noms_invites', 'msg_livredor'];
+    const entetes = ['Nom', 'Presence', 'Adultes', 'Enfants', 'Total', 'Végétariens', 'Dimanche midi', 'Nb dimanche midi', 'Accompagnants', 'Message'];
     
     function echapper(valeur) {
         if (valeur === undefined || valeur === null) return "";
@@ -105,7 +137,7 @@ app.get("/admin/export", (req, res) => {
     }
 
     const lignes = reponses.map(r => 
-        colonnes.map(col => echapper(r[col])).join(',')
+        colonnes.map(col => echapper(col === 'noms_invites' ? parseNomsInvites(r[col]) : r[col])).join(',')
     );
 
     const csv = [entetes.join(','), ...lignes].join('\n');
@@ -137,9 +169,10 @@ app.get('/admin/dashboard', (req, res) => {
     const totalEnfants = reponses.reduce((sum, r) => sum + parseInt(r.enfants || 0), 0);
     const totalPersonnes = totalAdultes + totalEnfants;
     const totalVegetariens = reponses.reduce((sum, r) => sum + parseInt(r.vegetariens || 0), 0);
+    const totalDimancheMidi = reponses.reduce((sum, r) => sum + (r.presence_dimanche === 'oui' ? parseInt(r.nb_pers_dimanche || 0, 10) : 0), 0);
 
     // Libellé listible pour la présence
-        function labelPresence(val) {
+    function labelPresence(val) {
         switch (val) {
             case "oui":       return { texte: "✓ Présent",    couleur: "#eef5e9", texteColor: "#3a6b2a" };
             case "non":       return { texte: "✗ Absent",     couleur: "#fdecea", texteColor: "#a02020" };
@@ -158,6 +191,13 @@ app.get('/admin/dashboard', (req, res) => {
     // Génération des lignes du tableau
     const lignes = reponses.map(r => {
         const p = labelPresence(r.presence);
+        const accompagnants = parseNomsInvites(r.noms_invites);
+        const dimancheMidi = r.presence_dimanche === 'oui'
+            ? `${r.nb_pers_dimanche || 0} personne${parseInt(r.nb_pers_dimanche || 0, 10) > 1 ? 's' : ''} le dimanche midi`
+            : 'Non le dimanche midi';
+        const listeAccompagnants = [accompagnants || '', dimancheMidi].filter(Boolean).join('<br>');
+        const totalDimanche = r.presence_dimanche === 'oui' ? (parseInt(r.nb_pers_dimanche || 0, 10)) : 0;
+
         return `
         <tr>
             <td>${r.nom || ''}</td>
@@ -166,6 +206,8 @@ app.get('/admin/dashboard', (req, res) => {
             <td class="center">${r.enfants || 0}</td>
             <td class="center"><strong>${r.total || 0}</strong></td>
             <td class="center"><strong>${r.vegetariens || 0}</strong></td>
+            <td class="accompagnants">${accompagnants || '<span class="vide">—</span>'}</td>
+            <td class="center"><strong>${totalDimanche}</strong></td>
             <td class="message">${r['msg_livredor'] || '<span class="vide">—</span>'}</td>
             <td class="date">${formatDate(r.date_envoi)}</td>
         </tr>`;
@@ -324,15 +366,25 @@ app.get('/admin/dashboard', (req, res) => {
             th:nth-child(3), td:nth-child(3),
             th:nth-child(4), td:nth-child(4),
             th:nth-child(5), td:nth-child(5),
-            th:nth-child(6), td:nth-child(6) {
-                width: 10%;
+            th:nth-child(6), td:nth-child(6),
+            th:nth-child(8), td:nth-child(8) {
+                width: 8%;
                 text-align: center;
             }
-            th:nth-child(7), td:nth-child(7) { width: 22%; }
-            th:nth-child(8), td:nth-child(8) { width: 10%; }
+            th:nth-child(7), td:nth-child(7) { width: 15%; }
+            th:nth-child(9), td:nth-child(9) { width: 22%; }
+            th:nth-child(10), td:nth-child(10) { width: 10%; }
 
             td.center {
                 text-align: center;
+            }
+
+            td.accompagnants {
+                max-width: 220px;
+                font-size: 13px;
+                color: var(--ink);
+                line-height: 1.4;
+                word-break: break-word;
             }
 
             td.message {
@@ -404,6 +456,10 @@ app.get('/admin/dashboard', (req, res) => {
                 <div class="label">Total végétariens</div>
                 <div class="value">${totalVegetariens}</div>
             </div>
+            <div class="stat gold">
+                <div class="label">Dimanche midi</div>
+                <div class="value">${totalDimancheMidi}</div>
+            </div>
         </div>
     
         <div class="toolbar">
@@ -423,6 +479,8 @@ app.get('/admin/dashboard', (req, res) => {
                             <th>Enfants</th>
                             <th>Total</th>
                             <th>Végétariens</th>
+                            <th>Accompagnants</th>
+                            <th>Tot Dimanche</th>
                             <th>Message</th>
                             <th>Date d'envoi</th>
                         </tr>

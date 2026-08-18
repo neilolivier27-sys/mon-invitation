@@ -1,8 +1,17 @@
 function ajouter_pers(field) {
-    if (parseInt(field.textContent, 10) < 20) {
+    if (parseInt(field.textContent, 10) < 10) {
         field.textContent = parseInt(field.textContent, 10) + 1;
         const total = document.querySelector(".total");
         total.textContent = parseInt(total.textContent, 10) + 1;
+
+        const names_pers = document.getElementById("names_pers");
+        if (parseInt(total.textContent, 10) > 1) {
+            if (names_pers.classList.contains("cache")) {
+                names_pers.classList.add("visible");
+                names_pers.classList.remove("cache");
+            }
+            ajouter_nom(names_pers);
+        }
     }
 }
 
@@ -11,6 +20,15 @@ function retirer_pers(field) {
         field.textContent = parseInt(field.textContent, 10) - 1;
         const total = document.querySelector(".total");
         total.textContent = parseInt(total.textContent, 10) - 1;
+
+        const names_pers = document.getElementById("names_pers");
+        if (parseInt(total.textContent, 10) <=  1) {
+            if (names_pers.classList.contains("visible")) {
+                names_pers.classList.add("cache");
+                names_pers.classList.remove("visible");
+            }
+        }
+        retirer_nom(names_pers);
     }
 }
 
@@ -26,6 +44,33 @@ function retirer_vege(field) {
     const vege = parseInt(field.textContent, 10);
     if (vege >= 1) {
         field.textContent = vege - 1;
+    }
+}
+
+function ajouter_nom(field) {
+    const div = document.createElement("div");
+    div.classList.add("name-entry");
+    const label = document.createElement("label");
+    const input = document.createElement("input");
+    
+    const total_pers = parseInt(document.querySelector(".total").textContent, 10);
+    input.id = `nom_personne_${total_pers}`;
+    input.name = `nom_personne_${total_pers}`;
+    input.placeholder = "Prénom";
+    input.type = "text";
+    input.classList.add("guest-name-input");
+    label.textContent = `Personne ${total_pers}`;
+    label.setAttribute("for", `nom_personne_${total_pers}`);
+
+    div.append(label);
+    div.append(input);
+    field.append(div);
+}
+
+function retirer_nom(field) {
+    const entries = field.querySelectorAll(".name-entry");
+    if (entries.length > 0) {
+        entries[entries.length - 1].remove();
     }
 }
 
@@ -75,6 +120,14 @@ function nettoyage() {
     elements.forEach(e => {
         e.style.outline = 'initial';
     });
+
+    const namesPers = document.getElementById("names_pers");
+    if (namesPers) {
+        namesPers.classList.add("cache");
+        namesPers.classList.remove("visible");
+        namesPers.querySelectorAll(".name-entry").forEach(entry => entry.remove());
+    }
+
     const fileInput = document.getElementById("image");
     const filename = document.getElementById("upload-filename");
     const preview = document.getElementById("photo-preview");
@@ -145,6 +198,44 @@ function verification(field, msg) {
     return true;
 }
 
+function verifier_noms_invites() {
+    const container = document.getElementById("names_pers");
+    if (!container || container.classList.contains("cache")) {
+        return true;
+    }
+
+    const champs = [...container.querySelectorAll(".name-entry input")];
+    let valide = true;
+
+    let message = container.querySelector("span.name-error");
+    if (!message) {
+        message = document.createElement("span");
+        message.className = "probleme name-error cache";
+        container.appendChild(message);
+    }
+
+    message.classList.add("cache");
+    message.classList.remove("visible");
+    message.textContent = "";
+
+    champs.forEach(input => {
+        input.style.outline = "initial";
+        const nom = input.value.trim();
+        if (!nom) {
+            input.style.outline = "2px solid red";
+            valide = false;
+        }
+    });
+
+    if (!valide) {
+        message.textContent = "Merci de remplir le nom complet de chaque invité.";
+        message.classList.remove("cache");
+        message.classList.add("visible");
+    }
+
+    return valide;
+}
+
 function recap_presence(value) {
     const presence = document.getElementById("recap-presence");
     switch (value) {
@@ -164,6 +255,20 @@ function recap_presence(value) {
             presence.style.color = "darkslategrey";
             break;
     }
+}
+
+function recap_dimanche() {
+    const recapDimanche = document.getElementById("recap-dimanche");
+    const radio = document.querySelector('input[name="presence_dimanche"]:checked');
+    const nb = parseInt(document.getElementById("nb_pers_dimanche").textContent, 10) || 0;
+
+    if (!radio || radio.value === "non") {
+        recapDimanche.textContent = "Non";
+        return;
+    }
+
+    const label = nb > 1 ? "personnes" : "personne";
+    recapDimanche.textContent = `Oui · ${nb} ${label}`;
 }
 
 function getOuCreerIdentifiant() {
@@ -277,6 +382,40 @@ nom.addEventListener("keyup", function(e) {
     verification(nom, "Nom et prénom sont obligatoires.");
 });
 
+// Affichage/masquage du compteur dimanche selon oui/non
+document.querySelectorAll('input[name="presence_dimanche"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        const bloc = document.getElementById('nb_dimanche');
+        if (this.value === 'oui') {
+            bloc.classList.remove('cache');
+            bloc.classList.add('visible');
+        } else {
+            bloc.classList.add('cache');
+            bloc.classList.remove('visible');
+            // Remet le compteur à 0 si on choisit non
+            document.getElementById('nb_pers_dimanche').textContent = '0';
+        }
+    });
+});
+
+// Boutons +/- dimanche (limités au total du samedi)
+document.querySelectorAll('.plus-dimanche').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const total_samedi = parseInt(document.getElementById('total').textContent, 10);
+        const champ = document.getElementById('nb_pers_dimanche');
+        const val = parseInt(champ.textContent, 10);
+        if (val < total_samedi) champ.textContent = val + 1;
+    });
+});
+
+document.querySelectorAll('.moins-dimanche').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const champ = document.getElementById('nb_pers_dimanche');
+        const val = parseInt(champ.textContent, 10);
+        if (val > 0) champ.textContent = val - 1;
+    });
+});
+
 document.forms["form_invit"].addEventListener("submit", async function(e) {
     e.preventDefault();
     
@@ -290,10 +429,19 @@ document.forms["form_invit"].addEventListener("submit", async function(e) {
     const nomValide = verification(nom, "Nom et prénom sont obligatoires.");
     const presenceValide = verification(presence, "Vous devez choisir une option.");
     const adultesValides = verification(adultes, "Il faut au moins un adulte.");
+    const nomsInvitesValides = verifier_noms_invites();
 
-    if (!nomValide || !presenceValide || !adultesValides) {
+    if (!nomValide || !presenceValide || !adultesValides || !nomsInvitesValides) {
         return;
     }
+
+    const nomsInvites = [...document.querySelectorAll(".name-entry input")]
+    .map(input => input.value.trim())
+    .filter(v => v.length > 0); // ignore les champs vides
+
+    const dimancheRadio = document.querySelector('input[name="presence_dimanche"]:checked');
+    const presenceDimanche = dimancheRadio ? dimancheRadio.value : "non";
+    const nbPersDimanche = document.getElementById("nb_pers_dimanche").textContent;
 
     const formData = new FormData();
     formData.append('id', getOuCreerIdentifiant());
@@ -303,7 +451,10 @@ document.forms["form_invit"].addEventListener("submit", async function(e) {
     formData.append('enfants', document.getElementById("nb_enfants").textContent);
     formData.append('total', document.getElementById("total").textContent);
     formData.append('vegetariens', document.getElementById("nb_vege").textContent);
+    formData.append('presence_dimanche', presenceDimanche);
+    formData.append('nb_pers_dimanche', nbPersDimanche);
     formData.append('msg_livredor', document.getElementById("msg-livredor").value);
+    formData.append('noms_invites', JSON.stringify(nomsInvites));
 
     const photoFile = document.getElementById("image").files[0];
     if (photoFile) {
@@ -317,6 +468,7 @@ document.forms["form_invit"].addEventListener("submit", async function(e) {
     document.getElementById("recap-enfants").textContent = formData.get('enfants');
     document.getElementById("recap-total").textContent = formData.get('total');
     recap_presence(presenceRecap);
+    recap_dimanche();
 
     try {
         const response = await fetch('/api/reponse', {
