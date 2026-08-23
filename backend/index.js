@@ -75,6 +75,7 @@ function parseNomsInvites(valeur) {
 }
 
 // ---- Suppression d'une réponse par id ----
+// ---- Suppression d'une réponse par id ----
 app.delete('/admin/supprimer/:id', (req, res) => {
     if (req.query.pwd !== MOT_DE_PASSE_ADMIN) {
         return res.status(401).json({ error: "Accès non autorisé." });
@@ -86,13 +87,26 @@ app.delete('/admin/supprimer/:id', (req, res) => {
     let reponses = JSON.parse(fs.readFileSync(FICHIER_REPONSES, 'utf-8'));
     const avant = reponses.length;
 
+    // On récupère la réponse avant de la supprimer pour connaître le nom de sa photo
+    const reponseASupprimer = reponses.find(r => r.id === req.params.id);
+
     reponses = reponses.filter(r => r.id !== req.params.id);
 
     if (reponses.length === avant) {
         return res.status(404).json({ error: "Réponse introuvable." });
     }
 
+    // Suppression du fichier JSON
     fs.writeFileSync(FICHIER_REPONSES, JSON.stringify(reponses, null, 2));
+
+    // Suppression de la photo associée si elle existe
+    if (reponseASupprimer && reponseASupprimer.photo) {
+        const cheminPhoto = path.join(__dirname, '..', 'photos', reponseASupprimer.photo);
+        if (fs.existsSync(cheminPhoto)) {
+            fs.unlinkSync(cheminPhoto);
+        }
+    }
+
     res.json({ success: true });
 });
 
