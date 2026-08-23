@@ -502,24 +502,40 @@ app.get('/admin/photos', (req, res) => {
     }
 
     const dossier = path.join(__dirname, '..', 'photos');
+    
     if (!fs.existsSync(dossier)) {
-        return res.send("Aucune photo reçue pour l'instant.");
+        return res.send(`<!DOCTYPE html>
+        <html><head><meta charset="UTF-8"><title>Photos invités</title></head>
+        <body style="font-family:sans-serif; padding:32px; background:#fff3eb;">
+            <h1>📸 Photos des invités</h1>
+            <p>Aucune photo reçue pour l'instant.</p>
+        </body></html>`);
     }
 
     const fichiers = fs.readdirSync(dossier);
-    const reponses = JSON.parse(fs.readFileSync(FICHIER_REPONSES, 'utf-8'));
+
+    // reponse.json peut ne pas encore exister
+    let reponses = [];
+    if (fs.existsSync(FICHIER_REPONSES)) {
+        reponses = JSON.parse(fs.readFileSync(FICHIER_REPONSES, 'utf-8'));
+    }
+
+    if (fichiers.length === 0) {
+        return res.send(`<!DOCTYPE html>
+        <html><head><meta charset="UTF-8"><title>Photos invités</title></head>
+        <body style="font-family:sans-serif; padding:32px; background:#fff3eb;">
+            <h1>📸 Photos des invités</h1>
+            <p>Aucune photo reçue pour l'instant.</p>
+        </body></html>`);
+    }
 
     const images = fichiers.map(f => {
-        // On retrouve le nom de l'invité à partir du nom du fichier (= son id)
         const id = path.basename(f, path.extname(f));
         const invite = reponses.find(r => r.id === id);
         return `
             <div style="text-align:center; margin-bottom:24px;">
-                <img src="/admin/photo/${f}?pwd=${req.query.pwd}" 
-                     style="max-width:300px; border-radius:12px;">
-                <p style="margin-top:8px; font-weight:600;">
-                    ${invite ? invite.nom : 'Inconnu'}
-                </p>
+                <img src="/admin/photo/${f}?pwd=${req.query.pwd}" style="max-width:300px; border-radius:12px;">
+                <p style="margin-top:8px; font-weight:600;">${invite ? invite.nom : 'Inconnu'}</p>
             </div>`;
     }).join('');
 
@@ -529,7 +545,7 @@ app.get('/admin/photos', (req, res) => {
     <h1>📸 Photos des invités</h1>
     <p>${fichiers.length} photo(s) reçue(s)</p>
     <div style="display:flex; flex-wrap:wrap; gap:24px; margin-top:32px;">
-        ${images.length ? images : '<p>Aucune photo pour l\'instant.</p>'}
+        ${images}
     </div>
 </body></html>`);
 });
