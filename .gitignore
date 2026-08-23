@@ -6,6 +6,7 @@ backend/node_modules/
 
 # Réponses des invités : à ne pas pousser sur GitHub (données personnelles !)
 backend/reponse.json
+backend/photos
 
 # Fichiers système
 .DS_Store

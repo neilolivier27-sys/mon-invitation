@@ -1,222 +1,223 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Invitation Anniversaire Jean-Michel Cristobal</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-        <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-        <link href="invitation.css" rel="stylesheet" type="text/css">
-    </head>
-    <body>
-        <section id="step1" class="card-invitation visible">
-            <div class="content">
-                <p class="eyebrow">Vous êtes cordialement invité</p>
-                <h1 class="headline">L'anniversaire de<br><span class="name">Jean-Michel Cristobal</span></h1>
-                <p class="age-line">qui fête ses <span class="age-number">80</span> ans !</p>
-                <div class="birthday-banner">Happy birthday !</div>
-                <div class="countdown" id="countdown" aria-label="compte à rebours">
-                    <div class="cd-block"><span class="cd-val" id="cd-j"></span><span class="cd-label">Jours</span></div>
-                    <div class="cd-block"><span class="cd-val" id="cd-h"></span><span class="cd-label">Heures</span></div>
-                    <div class="cd-block"><span class="cd-val" id="cd-m"></span><span class="cd-label">Minutes</span></div>
-                    <div class="cd-block"><span class="cd-val" id="cd-s"></span><span class="cd-label">Secondes</span></div>
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>Invitation Anniversaire Jean-Michel Cristobal</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+            <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+            <link href="invitation.css" rel="stylesheet" type="text/css">
+        </head>
+        <body>
+            <section id="step1" class="card-invitation visible">
+                <div class="content">
+                    <p class="eyebrow">Vous êtes cordialement invité</p>
+                    <h1 class="headline">L'anniversaire de<br><span class="name">Jean-Michel Cristobal</span></h1>
+                    <p class="age-line">qui fête ses <span class="age-number">80</span> ans !</p>
+                    <div class="birthday-banner">Happy birthday !</div>
+                    <div class="countdown" id="countdown" aria-label="compte à rebours">
+                        <div class="cd-block"><span class="cd-val" id="cd-j"></span><span class="cd-label">Jours</span></div>
+                        <div class="cd-block"><span class="cd-val" id="cd-h"></span><span class="cd-label">Heures</span></div>
+                        <div class="cd-block"><span class="cd-val" id="cd-m"></span><span class="cd-label">Minutes</span></div>
+                        <div class="cd-block"><span class="cd-val" id="cd-s"></span><span class="cd-label">Secondes</span></div>
+                    </div>
+                    
+                    <div class="details">
+                        <div class="detail-row">
+                            <div class="detail-icon">📅</div>
+                            <div class="detail-text">
+                                <span class="detail-label">Date</span>
+                                <span class="detail-value">Samedi 12 décembre</span>
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-icon">🕖</div>
+                            <div class="detail-text">
+                                <span class="detail-label">Heure</span>
+                                <span class="detail-value">18h30</span>
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-icon">📍</div>
+                            <div class="detail-text">
+                                <span class="detail-label">Lieu</span>
+                                <span class="detail-value">salle des fêtes de Parville</span>
+                                <span class="detail-sub">12 Rte de Beaumont, 27180 Parville</span>
+                                <a class="maps-link" href="#" taget="_blank"><i class="ti ti-map-pin" aria-hidden="true"></i>Voir google Maps</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="divider">
+                    <p class="rsvp-text">Merci de confirmer votre venu afin que l'on puisse bien tout organiser (repas, places, enfants, etc.)</p>
+                    <a href="#formulaire" class="rsvp-button">Je confirme ma présence →</a>
+                    <p class="rsvp-deadline">Merci de répondre avant le 1er novembre 2026</p>
                 </div>
-                
-                <div class="details">
-                    <div class="detail-row">
-                        <div class="detail-icon">📅</div>
-                        <div class="detail-text">
-                            <span class="detail-label">Date</span>
-                            <span class="detail-value">Samedi 12 décembre</span>
-                        </div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-icon">🕖</div>
-                        <div class="detail-text">
-                            <span class="detail-label">Heure</span>
-                            <span class="detail-value">[19h00]</span>
-                        </div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-icon">📍</div>
-                        <div class="detail-text">
-                            <span class="detail-label">Lieu</span>
-                            <span class="detail-value">salle des fêtes de Parville</span>
-                            <span class="detail-sub">12 Rte de Beaumont, 27180 Parville</span>
-                            <a class="maps-link" href="#" taget="_blank"><i class="ti ti-map-pin" aria-hidden="true"></i>Voir google Maps</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <hr class="divider">
-                <p class="rsvp-text">Merci de confirmer votre venu afin que l'on puisse bien tout organiser (repas, places, enfants, etc.)</p>
-                <a href="#formulaire" class="rsvp-button">Je confirme ma présence →</a>
-                <p class="rsvp-deadline">Merci de répondre avant le [date limite]</p>
-            </div>
-        </section>
+            </section>
 
-        <section id="step2" class="card-formulaire cache">
-            <form name="form_invit">
-                <fieldset id="form">
-                    <div id="nom">
-                        <label for="name">Nom et prénom *</label>
-                        <input type="text" id="name" placeholder="Entrez votre nom et prénom">
-                    </div>
-                    <div id="presence">
-                        <label id="present">Serez-vous présent(e) ?</label>
-                        <select name="presency" id="presency">
-                            <option value="choix">--Veuillez choisir une option--</option>
-                            <option value="oui">Oui, je viens</option>
-                            <option value="non">Non, je ne pourrai pas</option>
-                            <option value="uncertain">Pas encore sûr(e)</option>
-                        </select>
-                    </div>
-                    <hr>
-                    <div id="nb_personnes">
-                        <div class="container_pers" id="nb_adults">
-                            <div class="info">
-                                <label for="adultes">Adultes</label>
-                                <span class="under_text">Vous compris</span>
-                            </div>
-                            <div class="controls">
-                                <input type="button" class="moins" value="-">
-                                <span class="nb_pers" id="nb_adultes">0</span>
-                                <input type="button" class="plus" value="+">
-                            </div>
+            <section id="step2" class="card-formulaire cache">
+                <form name="form_invit">
+                    <fieldset id="form">
+                        <div id="nom">
+                            <label for="name">Nom et prénom *</label>
+                            <input type="text" id="name" placeholder="Entrez votre nom et prénom">
                         </div>
-                        <div class="container_pers" id="nb_children">
-                            <div class="info">
-                                <label for="children">Enfants</label>
-                                <span class="under_text">Moins de 12 ans</span>
-                            </div>
-                            <div class="controls">
-                                <input type="button" class="moins" value="-">
-                                <span class="nb_pers" id="nb_enfants">0</span>
-                                <input type="button" class="plus" value="+">
-                            </div>
+                        <div id="presence">
+                            <label id="present">Serez-vous présent(e) ?</label>
+                            <select name="presency" id="presency">
+                                <option value="choix">--Veuillez choisir une option--</option>
+                                <option value="oui">Oui, je viens</option>
+                                <option value="non">Non, je ne pourrai pas</option>
+                                <option value="uncertain">Pas encore sûr(e)</option>
+                            </select>
                         </div>
                         <hr>
-                        <div id="total_pers">Total<span class="total" id="total">0</span></div>
-                        <hr>
-                        <div class="container_pers" id="nb_vegi">
-                            <div class="info">
-                                <label for="vegi">Végétariens</label>
-                                <span class="under_text">Vous compris</span>
-                            </div>
-                            <div class="controls">
-                                <input type="button" class="moins-vege" value="-">
-                                <span class="nb_pers" id="nb_vege">0</span>
-                                <input type="button" class="plus-vege" value="+">
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div id="dimanche">
-                        <div id="presence_dimanche">
-                            <label>Serez-vous présent(e) le dimanche midi ?</label>
-                            <span class="under_text">Dimanche 13 décembre - repas de midi</span>
-                            <div id="choix_dimanche">
-                                <label class="radio-label">
-                                    <input type="radio" name="presence_dimanche" value="oui">Oui
-                                </label>
-                                <label class="radio-label">
-                                    <input type="radio" name="presence_dimanche" value="non">Non
-                                </label>
-                            </div>
-                        </div>
-
-                        <div id="nb_dimanche" class="cache">
-                            <div class="container_pers">
+                        <div id="nb_personnes">
+                            <div class="container_pers" id="nb_adults">
                                 <div class="info">
-                                    <label>Combien serez-vous ?</label>
-                                    <span class="under_text">Maximum: votre total du samedi</span>
+                                    <label for="adultes">Adultes</label>
+                                    <span class="under_text">Vous compris</span>
                                 </div>
                                 <div class="controls">
-                                    <input type="button" class="moins-dimanche" value="-">
-                                    <span class="nb_pers" id="nb_pers_dimanche">0</span>
-                                    <input type="button" class="plus-dimanche" value="+">
+                                    <input type="button" class="moins" value="-">
+                                    <span class="nb_pers" id="nb_adultes">0</span>
+                                    <input type="button" class="plus" value="+">
+                                </div>
+                            </div>
+                            <div class="container_pers" id="nb_children">
+                                <div class="info">
+                                    <label for="children">Enfants</label>
+                                    <span class="under_text">Moins de 12 ans</span>
+                                </div>
+                                <div class="controls">
+                                    <input type="button" class="moins" value="-">
+                                    <span class="nb_pers" id="nb_enfants">0</span>
+                                    <input type="button" class="plus" value="+">
+                                </div>
+                            </div>
+                            <hr>
+                            <div id="total_pers">Total<span class="total" id="total">0</span></div>
+                            <hr>
+                            <div class="container_pers" id="nb_vegi">
+                                <div class="info">
+                                    <label for="vegi">Végétariens</label>
+                                    <span class="under_text">Vous compris</span>
+                                </div>
+                                <div class="controls">
+                                    <input type="button" class="moins-vege" value="-">
+                                    <span class="nb_pers" id="nb_vege">0</span>
+                                    <input type="button" class="plus-vege" value="+">
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div id="names_pers" class="cache">
-                        <div id="info_names">
-                            <label for="names">Entrez les noms des invités</label>
-                            <span class="under_text">Sans votre nom</span>
+                        <hr>
+                        <div id="names_pers" class="cache">
+                            <div id="info_names">
+                                <label for="names">Entrez les noms des invités</label>
+                                <span class="under_text">Sans votre nom</span>
+                            </div>
                         </div>
-                    </div>
-                    <hr>
-                    <div id="img_select">
-                        <label for="image">Sélectionnez une photo souvenir avec Jean-Michel</label>
-                        <span class="under_text">Vous pouvez en ramener une le jour de l'événement</span>
-                        <div class="upload-wrapper">
-                            <label for="image" class="upload-button">Choisir une photo</label>
-                            <input type="file" name="image" id="image" accept="image/*">
-                            <span class="upload-filename" id="upload-filename">Aucune photo sélectionnée</span>
-                        </div>
-                        <div id="photo-preview" class="photo-preview hidden">
-                            <img id="preview-image" src="" alt="Aperçu de la photo sélectionnée">
-                            <button type="button" class="clear-photo" id="clear-photo">Retirer</button>
-                        </div>
-                    </div>
-                    <hr>   
-                    <div id="livredor">
-                        <label for="msg-livredor">Entrez un message pour Jean-Michel</label>
-                        <textarea name="msg-livredor" id="msg-livredor" placeholder="Entrez votre message ici"></textarea>
-                    </div>
-                </fieldset>
-                <br>
-                <input type="submit" class="valider" id="valider" value="Valider">
-                <input type="reset" class="effacer" id="effacer" value="Effacer">
-            </form>
-        </section>
+                        <hr>
+                        <div id="dimanche">
+                            <div id="presence_dimanche">
+                                <label>Serez-vous présent(e) le dimanche midi ?</label>
+                                <span class="under_text">Dimanche 13 décembre - repas de midi</span>
+                                <div id="choix_dimanche">
+                                    <label class="radio-label">
+                                        <input type="radio" name="presence_dimanche" value="oui">Oui
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="presence_dimanche" value="non">Non
+                                    </label>
+                                </div>
+                            </div>
 
-        <section id="step3" class="recap-wrap cache">
-            <div class="recap-content">
-                <div class="recap-icon">✓</div>
-                <p class="recap-title">C'est noté</p>
-                <p class="recap-subtitle">Merci, voici un récapitulatif de votre réponse</p>
-                <div class="recap-card">
-                    <div class="recap-row">
-                        <span class="recap-row-label">Nom</span>
-                        <span class="recap-row-value" id="recap-nom"></span>
+                            <div id="nb_dimanche" class="cache">
+                                <div class="container_pers">
+                                    <div class="info">
+                                        <label>Combien serez-vous ?</label>
+                                        <span class="under_text">Maximum: votre total du samedi</span>
+                                    </div>
+                                    <div class="controls">
+                                        <input type="button" class="moins-dimanche" value="-">
+                                        <span class="nb_pers" id="nb_pers_dimanche">0</span>
+                                        <input type="button" class="plus-dimanche" value="+">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div id="img_select">
+                            <label for="image">Sélectionnez une photo souvenir avec Jean-Michel</label>
+                            <span class="under_text">Vous pouvez en ramener une le jour de l'événement</span>
+                            <div class="upload-wrapper">
+                                <label for="image" class="upload-button">Choisir une photo</label>
+                                <input type="file" name="image" id="image" accept="image/*">
+                                <span class="upload-filename" id="upload-filename">Aucune photo sélectionnée</span>
+                            </div>
+                            <div id="photo-preview" class="photo-preview hidden">
+                                <img id="preview-image" src="" alt="Aperçu de la photo sélectionnée">
+                                <button type="button" class="clear-photo" id="clear-photo">Retirer</button>
+                            </div>
+                        </div>
+                        <hr>   
+                        <div id="livredor">
+                            <label for="msg-livredor">Entrez un message pour Jean-Michel</label>
+                            <textarea name="msg-livredor" id="msg-livredor" placeholder="Entrez votre message ici"></textarea>
+                        </div>
+                    </fieldset>
+                    <br>
+                    <input type="submit" class="valider" id="valider" value="Valider">
+                    <input type="reset" class="effacer" id="effacer" value="Effacer">
+                </form>
+            </section>
+
+            <section id="step3" class="recap-wrap cache">
+                <div class="recap-content">
+                    <div class="recap-icon">✓</div>
+                    <p class="recap-title">C'est noté</p>
+                    <p class="recap-subtitle">Merci, voici un récapitulatif de votre réponse</p>
+                    <div class="recap-card">
+                        <div class="recap-row">
+                            <span class="recap-row-label">Nom</span>
+                            <span class="recap-row-value" id="recap-nom"></span>
+                        </div>
+                        <div class="recap-row">
+                            <span class="recap-row-label">Présence</span>
+                            <span class="recap-row-value" id="recap-presence">Je viens</span>
+                        </div>
+                        <hr class="divider">
+                        <div class="recap-row">
+                            <span class="recap-row-label">Adultes</span>
+                            <span class="recap-row-value" id="recap-adultes"></span>
+                        </div>
+                        <div class="recap-row">
+                            <span class="recap-row-label">Enfants</span>
+                            <span class="recap-row-value" id="recap-enfants"></span>
+                        </div>
+                        <div class="recap-total">
+                            <span class="recap-total-label">Total personnes</span>
+                            <span class="recap-total-value" id="recap-total"></span>
+                        </div>
+                        <div class="recap-row">
+                            <span class="recap-row-label">Végétariens</span>
+                            <span class="recap-row-value" id="recap-vege"></span>
+                        </div>
+                        <hr class="recap-divider">
+                        <div class="recap-row" id="recap-dimanche-row">
+                            <span class="recap-row-label">Dimanche midi</span>
+                            <span class="recap-row-value" id="recap-dimanche"></span>
+                        </div>
                     </div>
-                    <div class="recap-row">
-                        <span class="recap-row-label">Présence</span>
-                        <span class="recap-row-value" id="recap-presence">Je viens</span>
-                    </div>
-                    <hr class="divider">
-                    <div class="recap-row">
-                        <span class="recap-row-label">Adultes</span>
-                        <span class="recap-row-value" id="recap-adultes"></span>
-                    </div>
-                    <div class="recap-row">
-                        <span class="recap-row-label">Enfants</span>
-                        <span class="recap-row-value" id="recap-enfants"></span>
-                    </div>
-                    <div class="recap-total">
-                        <span class="recap-total-label">Total personnes</span>
-                        <span class="recap-total-value" id="recap-total"></span>
-                    </div>
-                    <div class="recap-row">
-                        <span class="recap-row-label">Végétariens</span>
-                        <span class="recap-row-value" id="recap-vege"></span>
-                    </div>
-                    <hr class="recap-divider">
-                    <div class="recap-row" id="recap-dimanche-row">
-                        <span class="recap-row-label">Dimanche midi</span>
-                        <span class="recap-row-value" id="recap-dimanche"></span>
-                    </div>
+                    <p class="recap-footer">Si une information est incorrecte, n'hésitez pas à renvoyer le formulaire - votre dernière réponse sera prise en compte.</p>
+                    <button class="recap-modify" id="recap-modify">Modifier ma réponse</button>
                 </div>
-                <p class="recap-footer">Si une information est incorrecte, n'hésitez pas à renvoyer le formulaire - votre dernière réponse sera prise en compte.</p>
-                <button class="recap-modify" id="recap-modify">Modifier ma réponse</button>
-            </div>
-        </section>
-    </body>
-    <footer>
-        <script src="scripts/jquery-2.1.4.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-        <script type="text/javascript" src="invitation.js"></script>
-    </footer>
-</html>
+            </section>
+        </body>
+        <footer>
+            <script src="scripts/jquery-2.1.4.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+            <script type="text/javascript" src="invitation.js"></script>
+        </footer>
+    </html>
 
