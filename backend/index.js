@@ -112,7 +112,7 @@ app.get("/admin/export", (req, res) => {
     }
 
     // Lecture des réponses
-    if (!fs.readFileSync(FICHIER_REPONSES)) {
+    if (!fs.existsSync(FICHIER_REPONSES)) {
         return res.status(404).send("Aucune réponse enregistrée pour l'instant.");
     }
 
@@ -155,7 +155,7 @@ app.get('/admin/dashboard', (req, res) => {
     }
 
     // Lecture des réponses
-    if (!fs.readFileSync(FICHIER_REPONSES)) {
+    if (!fs.existsSync(FICHIER_REPONSES)) {
         return res.status(404).send("Aucune réponse enregistrée pour l'instant.");
     }
 
